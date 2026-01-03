@@ -1,0 +1,91 @@
+:root {
+    /* Cozy & Warm Color Palette */
+    --bg-surface: #faf9f6;
+    /* Linen */
+    --bg-body: #f5f4f0;
+    /* Warm off-white */
+
+    --text-main: #27272a;
+    /* Zinc 800 */
+    --text-muted: #52525b;
+    /* Zinc 600 */
+
+    /* Warmer & Brighter Green Palette */
+    --primary: #739055;
+    /* Brighter Warm Olive */
+    --primary-light: #a4be7b;
+    /* Soft light olive */
+    --primary-dark: #4b6630;
+    /* Deep Warm Green */
+
+    --accent: #d6d3d1;
+    /* Stone 300 */
+    --border-color: #ddd1c7;
+    /* Warm earthy border */
+
+    --font-main: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+    --header-height: 70px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-surface);
+    color: var(--text-main);
+    font-family: var(--font-main);
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+main {
+    max-width: 100%;
+    margin: 0 auto;
+    /* Account for fixed header and sticky footer in spacing */
+    padding-bottom: 35px;
+    /* Same as footer height */
+}
+
+section {
+    min-height: calc(100vh - var(--header-height) - 35px);
+    /* Ensure section fills the screen minus header and footer */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    scroll-margin-top: var(--header-height);
+    padding: 80px 0;
+    /* Consistent internal spacing */
+}
+
+#resume {
+    background: #f5f4f2;
+    /* Warm subtle grey for separation */
+}
+
+@media (max-width: 768px) {
+    section {
+        padding: 60px 0;
+    }
+}
+
+/* Base styles for the reveal animation used in main.js */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.reveal.fade-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Ensure shadow DOM components inherit fonts where possible */
+/* Note: Most shadow DOM components define their own font-family, 
+   so we might need to update them if they don't use variables properly. */
