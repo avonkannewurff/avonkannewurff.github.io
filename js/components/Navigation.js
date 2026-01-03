@@ -78,7 +78,7 @@ class AppNav extends HTMLElement {
             }
         </style>
         <nav>
-            <a href="#about" class="logo">ADAM VON KANNEWURFF</a>
+            <a href="#about" class="logo">Adam von Kannewurff</a>
             <ul>
                 <li><a href="#about">About</a></li>
                 <li><a href="#resume">Resume</a></li>
