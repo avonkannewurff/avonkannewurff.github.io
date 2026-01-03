@@ -58,7 +58,7 @@ class ProjectsSection extends HTMLElement {
                     title="Multi-Paxos Implementation" 
                     description="Fault-tolerant distributed consensus algorithm implemented from scratch handling leader election, log replication, and garbage collection."
                     tags="Java, Distributed Systems"
-                    image="../public/Paxos_nodes.jpg"
+                    image="../public/Paxos_Nodes.jpg"
                     link="#">
                 </project-card>
 
