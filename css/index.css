@@ -1,26 +1,27 @@
 :root {
+    color-scheme: light dark;
     /* Cozy & Warm Color Palette */
-    --bg-surface: #faf9f6;
+    --bg-surface: light-dark(#faf9f6, #18181b);
     /* Linen */
-    --bg-body: #f5f4f0;
+    --bg-body: light-dark(#f5f4f0, #09090b);
     /* Warm off-white */
 
-    --text-main: #27272a;
+    --text-main: light-dark(#27272a, #f4f4f5);
     /* Zinc 800 */
-    --text-muted: #52525b;
+    --text-muted: light-dark(#52525b, #a1a1aa);
     /* Zinc 600 */
 
     /* Warmer & Brighter Green Palette */
-    --primary: #739055;
+    --primary: light-dark(#739055, #a4be7b);
     /* Brighter Warm Olive */
-    --primary-light: #a4be7b;
+    --primary-light: light-dark(#a4be7b, #c3d8a4);
     /* Soft light olive */
-    --primary-dark: #4b6630;
+    --primary-dark: light-dark(#4b6630, #88a666);
     /* Deep Warm Green */
 
-    --accent: #d6d3d1;
+    --accent: light-dark(#d6d3d1, #44403c);
     /* Stone 300 */
-    --border-color: #ddd1c7;
+    --border-color: light-dark(#ddd1c7, #3f3f46);
     /* Warm earthy border */
 
     --font-main: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -64,7 +65,7 @@ section {
 }
 
 #resume {
-    background: #f5f4f2;
+    background: light-dark(#f5f4f2, #18181b);
     /* Warm subtle grey for separation */
 }
 

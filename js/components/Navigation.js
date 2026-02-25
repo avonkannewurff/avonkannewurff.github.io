@@ -76,6 +76,23 @@ class AppNav extends HTMLElement {
                     font-size: 0.85rem;
                 }
             }
+
+            #theme-toggle {
+                background: none;
+                border: none;
+                cursor: pointer;
+                color: var(--text-main, #27272a);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0;
+                transition: color 0.3s ease;
+            }
+            #theme-toggle:hover {
+                color: var(--primary, #4a5c44);
+            }
+            .sun-icon { display: none; }
+            .moon-icon { display: block; }
         </style>
         <nav>
             <a href="#about" class="logo">Adam von Kannewurff</a>
@@ -83,9 +100,55 @@ class AppNav extends HTMLElement {
                 <li><a href="#about">About</a></li>
                 <li><a href="#resume">Resume</a></li>
                 <li><a href="#projects">Projects</a></li>
+                <li>
+                    <button id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+                        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+                        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                    </button>
+                </li>
             </ul>
         </nav>
         `;
+
+        // Theme toggle logic
+        const themeBtn = this.shadowRoot.getElementById('theme-toggle');
+        const sunIcon = this.shadowRoot.querySelector('.sun-icon');
+        const moonIcon = this.shadowRoot.querySelector('.moon-icon');
+
+        const updateIcons = () => {
+            const currentScheme = getComputedStyle(document.documentElement).colorScheme;
+            const isDark = currentScheme === 'dark' || 
+                           (currentScheme === 'light dark' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            
+            if (isDark) {
+                sunIcon.style.display = 'block';
+                moonIcon.style.display = 'none';
+            } else {
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'block';
+            }
+        };
+
+        // Initial setup and listeners
+        updateIcons();
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateIcons);
+
+        // Allow listening for custom theme changes if needed
+        document.addEventListener('theme-changed', updateIcons);
+
+        themeBtn.addEventListener('click', () => {
+            const currentScheme = getComputedStyle(document.documentElement).colorScheme;
+            const isCurrentlyDark = currentScheme === 'dark' || 
+                                    (currentScheme === 'light dark' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            
+            const newTheme = isCurrentlyDark ? 'light' : 'dark';
+            document.documentElement.style.colorScheme = newTheme;
+            localStorage.setItem('theme', newTheme);
+            
+            // Dispatch event for components to react to if needed
+            document.dispatchEvent(new CustomEvent('theme-changed', { detail: { theme: newTheme } }));
+            updateIcons();
+        });
 
         // Smooth scroll implementation for shadow DOM links
         this.shadowRoot.querySelectorAll('a').forEach(anchor => {

@@ -14,7 +14,7 @@ class ResumeSection extends HTMLElement {
             :host {
                 display: block;
                 padding: 0;
-                background: #f5f4f2; /* Warm subtle grey for separation */
+                background: light-dark(#f5f4f2, #18181b); /* Warm subtle grey for separation */
             }
 
             .container {
@@ -42,7 +42,7 @@ class ResumeSection extends HTMLElement {
             }
 
             .card {
-                background: white;
+                background: light-dark(white, #27272a);
                 padding: 2rem;
                 border-radius: 8px;
                 border: 1px solid var(--border-color, #ddd1c7);

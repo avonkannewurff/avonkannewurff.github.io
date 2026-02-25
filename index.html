@@ -10,6 +10,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/index.css">
+    <script>
+        const theme = localStorage.getItem('theme');
+        if (theme) { document.documentElement.style.colorScheme = theme; }
+    </script>
     <script type="module" src="js/main.js"></script>
     <meta name="google-site-verification" content="PSSnwfFbsG1UGoRJbS584KXX8ARcuIJbYmcss-uY8x8" />
 </head>
