@@ -77,6 +77,24 @@ class AppNav extends HTMLElement {
                 }
             }
 
+            .nav-btn-group {
+                display: flex;
+                align-items: center;
+            }
+            .nav-btn-group .nav-resume-link {
+                padding-right: 0.75rem;
+            }
+            .nav-btn-group .nav-download-link {
+                display: flex;
+                align-items: center;
+                padding-left: 0.75rem;
+                border-left: 1px solid var(--border-color, #ddd1c7);
+                color: var(--text-muted, #52525b);
+            }
+            .nav-btn-group .nav-download-link:hover {
+                color: var(--primary, #4a5c44);
+            }
+
             #theme-toggle {
                 background: none;
                 border: none;
@@ -98,7 +116,12 @@ class AppNav extends HTMLElement {
             <a href="#about" class="logo">Adam von Kannewurff</a>
             <ul>
                 <li><a href="#about">About</a></li>
-                <li><a href="#resume">Resume</a></li>
+                <li class="nav-btn-group">
+                    <a href="#resume" class="nav-resume-link">Resume</a>
+                    <a href="public/Adam von Kannewurff_Resume.pdf" download class="nav-download-link" title="Download Resume" aria-label="Download Resume">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                    </a>
+                </li>
                 <li><a href="#projects">Projects</a></li>
                 <li>
                     <button id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
@@ -117,9 +140,9 @@ class AppNav extends HTMLElement {
 
         const updateIcons = () => {
             const currentScheme = getComputedStyle(document.documentElement).colorScheme;
-            const isDark = currentScheme === 'dark' || 
-                           (currentScheme === 'light dark' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-            
+            const isDark = currentScheme === 'dark' ||
+                (currentScheme === 'light dark' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
             if (isDark) {
                 sunIcon.style.display = 'block';
                 moonIcon.style.display = 'none';
@@ -138,13 +161,13 @@ class AppNav extends HTMLElement {
 
         themeBtn.addEventListener('click', () => {
             const currentScheme = getComputedStyle(document.documentElement).colorScheme;
-            const isCurrentlyDark = currentScheme === 'dark' || 
-                                    (currentScheme === 'light dark' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-            
+            const isCurrentlyDark = currentScheme === 'dark' ||
+                (currentScheme === 'light dark' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
             const newTheme = isCurrentlyDark ? 'light' : 'dark';
             document.documentElement.style.colorScheme = newTheme;
             localStorage.setItem('theme', newTheme);
-            
+
             // Dispatch event for components to react to if needed
             document.dispatchEvent(new CustomEvent('theme-changed', { detail: { theme: newTheme } }));
             updateIcons();
