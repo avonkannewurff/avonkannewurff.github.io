@@ -103,6 +103,21 @@ class AboutSection extends HTMLElement {
             @media (max-width: 768px) {
                 :host { padding: 60px 0; }
                 .container { padding: 0 1rem; }
+                .cta-group {
+                    flex-direction: column;
+                }
+                .btn {
+                    text-align: center;
+                    width: 100%;
+                }
+                .btn-group {
+                    width: 100%;
+                }
+                .btn-group-left {
+                    flex-grow: 1;
+                    justify-content: center;
+                    display: flex;
+                }
             }
         </style>
         <div class="container hero">
