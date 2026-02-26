@@ -145,7 +145,7 @@ class AppNav extends HTMLElement {
                 color: var(--primary, #4a5c44);
             }
 
-            #theme-toggle {
+            .theme-toggle {
                 background: none;
                 border: none;
                 cursor: pointer;
@@ -156,8 +156,11 @@ class AppNav extends HTMLElement {
                 padding: 0;
                 transition: color 0.3s ease;
             }
-            #theme-toggle:hover {
+            .theme-toggle:hover {
                 color: var(--primary, #4a5c44);
+            }
+            .theme-toggle-mobile {
+                display: none;
             }
             .sun-icon { display: none; }
             .moon-icon { display: block; }
@@ -166,6 +169,10 @@ class AppNav extends HTMLElement {
             <div class="nav-left">
                 <button id="hamburger-btn" aria-label="Toggle navigation" title="Toggle navigation">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+                </button>
+                <button class="theme-toggle theme-toggle-mobile" aria-label="Toggle theme" title="Toggle theme">
+                    <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+                    <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
                 </button>
                 <a href="#about" class="logo">Adam von Kannewurff</a>
             </div>
@@ -180,7 +187,7 @@ class AppNav extends HTMLElement {
                     </li>
                     <li><a href="#projects">Projects</a></li>
                 </ul>
-                <button id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+                <button class="theme-toggle theme-toggle-desktop" aria-label="Toggle theme" title="Toggle theme">
                     <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
                     <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
                 </button>
@@ -189,22 +196,17 @@ class AppNav extends HTMLElement {
         `;
 
         // Theme toggle logic
-        const themeBtn = this.shadowRoot.getElementById('theme-toggle');
-        const sunIcon = this.shadowRoot.querySelector('.sun-icon');
-        const moonIcon = this.shadowRoot.querySelector('.moon-icon');
+        const themeBtns = this.shadowRoot.querySelectorAll('.theme-toggle');
+        const sunIcons = this.shadowRoot.querySelectorAll('.sun-icon');
+        const moonIcons = this.shadowRoot.querySelectorAll('.moon-icon');
 
         const updateIcons = () => {
             const currentScheme = getComputedStyle(document.documentElement).colorScheme;
             const isDark = currentScheme === 'dark' ||
                 (currentScheme === 'light dark' && window.matchMedia('(prefers-color-scheme: dark)').matches);
 
-            if (isDark) {
-                sunIcon.style.display = 'block';
-                moonIcon.style.display = 'none';
-            } else {
-                sunIcon.style.display = 'none';
-                moonIcon.style.display = 'block';
-            }
+            sunIcons.forEach(icon => icon.style.display = isDark ? 'block' : 'none');
+            moonIcons.forEach(icon => icon.style.display = isDark ? 'none' : 'block');
         };
 
         // Initial setup and listeners
@@ -214,7 +216,7 @@ class AppNav extends HTMLElement {
         // Allow listening for custom theme changes if needed
         document.addEventListener('theme-changed', updateIcons);
 
-        themeBtn.addEventListener('click', () => {
+        themeBtns.forEach(btn => btn.addEventListener('click', () => {
             const currentScheme = getComputedStyle(document.documentElement).colorScheme;
             const isCurrentlyDark = currentScheme === 'dark' ||
                 (currentScheme === 'light dark' && window.matchMedia('(prefers-color-scheme: dark)').matches);
@@ -226,7 +228,7 @@ class AppNav extends HTMLElement {
             // Dispatch event for components to react to if needed
             document.dispatchEvent(new CustomEvent('theme-changed', { detail: { theme: newTheme } }));
             updateIcons();
-        });
+        }));
 
         // Smooth scroll implementation for shadow DOM links
         const navLinksElement = this.shadowRoot.getElementById('nav-links');

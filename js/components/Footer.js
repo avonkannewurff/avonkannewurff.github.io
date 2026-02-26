@@ -17,18 +17,22 @@ class AppFooter extends HTMLElement {
                 background: var(--bg-surface, #faf9f6);
                 border-top: 1px solid var(--border-color, #ddd1c7);
                 padding: 0;
-                height: 35px; /* Half of header height (70px) */
-                position: sticky;
+                position: fixed;
                 bottom: 0;
+                left: 0;
                 z-index: 900;
                 margin-top: 0;
+            }
+
+            * {
+                box-sizing: border-box;
             }
 
             footer {
                 max-width: 1100px;
                 margin: 0 auto;
-                padding: 0 2rem;
-                height: 100%;
+                padding: 10px 2rem;
+                min-height: 35px;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
