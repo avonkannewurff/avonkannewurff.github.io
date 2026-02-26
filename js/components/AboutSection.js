@@ -80,6 +80,26 @@ class AboutSection extends HTMLElement {
                 background: var(--bg-body, #f5f4f0);
             }
 
+            .btn-group {
+                display: flex;
+            }
+
+            .btn-group-left {
+                border-top-right-radius: 0;
+                border-bottom-right-radius: 0;
+                border-right: none;
+            }
+
+            .btn-group-right {
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+                padding-left: 1.25rem;
+                padding-right: 1.25rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
             @media (max-width: 768px) {
                 :host { padding: 60px 0; }
                 .container { padding: 0 1rem; }
@@ -91,7 +111,12 @@ class AboutSection extends HTMLElement {
                 I'm Adam von Kannewurff, a software developer focused on web and systems applications.
             </p>
             <div class="cta-group">
-                <a href="#resume" class="btn btn-outline">My Resume</a>
+                <div class="btn-group">
+                    <a href="#resume" class="btn btn-outline btn-group-left">My Resume</a>
+                    <a href="public/Adam von Kannewurff_Resume.pdf" download class="btn btn-outline btn-group-right" aria-label="Download Resume" title="Download Resume">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                    </a>
+                </div>
                 <a href="#projects" class="btn btn-primary">View Projects</a>
             </div>
         </div>
@@ -100,15 +125,20 @@ class AboutSection extends HTMLElement {
         // Delegate link clicks to main window for SPA smooth scroll
         this.shadowRoot.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', (e) => {
+                if (link.hasAttribute('download')) return;
+
+                const href = link.getAttribute('href');
+                if (!href || !href.startsWith('#')) return;
+
                 e.preventDefault();
-                const targetId = link.getAttribute('href').substring(1);
+                const targetId = href.substring(1);
                 const targetElement = document.getElementById(targetId);
                 if (targetElement) {
                     const headerOffset = 70;
                     const elementPosition = targetElement.getBoundingClientRect().top;
                     const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
                     window.scrollTo({ top: offsetPosition, behavior: "smooth" });
-                    history.pushState(null, null, link.getAttribute('href'));
+                    history.pushState(null, null, href);
                 }
             });
         });
