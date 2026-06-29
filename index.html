@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 
 <head>
     <meta charset="UTF-8">
@@ -11,6 +11,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/index.css">
     <script>
+        // Flip the no-js hook to js before paint, and apply any saved theme.
+        document.documentElement.className = 'js';
         const theme = localStorage.getItem('theme');
         if (theme) { document.documentElement.style.colorScheme = theme; }
     </script>
@@ -19,23 +21,187 @@
 </head>
 
 <body>
-    <app-nav></app-nav>
+    <header class="site-nav">
+        <nav>
+            <div class="nav-left">
+                <input type="checkbox" id="nav-toggle" class="nav-toggle">
+                <label id="hamburger-btn" for="nav-toggle" aria-label="Toggle navigation" title="Toggle navigation">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+                </label>
+                <button class="theme-toggle theme-toggle-mobile" type="button" aria-label="Toggle theme" title="Toggle theme">
+                    <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+                    <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                </button>
+                <a href="#about" class="logo">Adam von Kannewurff</a>
+            </div>
+            <div class="nav-right">
+                <ul id="nav-links">
+                    <li><a href="#about">About</a></li>
+                    <li class="nav-btn-group">
+                        <a href="#resume" class="nav-resume-link">Resume</a>
+                        <a href="public/Adam von Kannewurff_Resume.pdf" download class="nav-download-link" title="Download Resume" aria-label="Download Resume">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                        </a>
+                    </li>
+                    <li><a href="#projects">Projects</a></li>
+                </ul>
+                <button class="theme-toggle theme-toggle-desktop" type="button" aria-label="Toggle theme" title="Toggle theme">
+                    <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+                    <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                </button>
+            </div>
+        </nav>
+    </header>
 
     <main>
         <section id="about" class="reveal">
-            <about-section></about-section>
+            <div class="container hero">
+                <h1>Systems <span class="highlight">thinking</span>.</h1>
+                <p>
+                    I'm Adam von Kannewurff, a software developer focused on web and systems applications.
+                </p>
+                <div class="cta-group">
+                    <div class="btn-group">
+                        <a href="#resume" class="btn btn-outline btn-group-left">My Resume</a>
+                        <a href="public/Adam von Kannewurff_Resume.pdf" download class="btn btn-outline btn-group-right" aria-label="Download Resume" title="Download Resume">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                        </a>
+                    </div>
+                    <a href="#projects" class="btn btn-primary">View Projects</a>
+                </div>
+            </div>
         </section>
 
         <section id="resume" class="reveal">
-            <resume-section></resume-section>
+            <div class="container">
+                <div class="resume-header">
+                    <h2>Resume</h2>
+                    <a href="public/Adam von Kannewurff_Resume.pdf" download class="download-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                        PDF
+                    </a>
+                </div>
+                <div class="resume-grid">
+                    <div class="sidebar">
+                        <div class="resume-card">
+                            <h3>Technical Skills</h3>
+                            <ul>
+                                <li><strong>Languages:</strong> Java, C/C++, JavaScript/TypeScript, Python, SQL (Postgres), HTML/CSS</li>
+                                <li style="margin-top: 0.5rem;"><strong>Cloud &amp; DevOps:</strong> AWS, Azure, Kubernetes, Docker, Terraform (HCL/CDKTF), GitLab CI/CD, Splunk</li>
+                                <li style="margin-top: 0.5rem;"><strong>Frameworks:</strong> Node.js, FastAPI, React, Vue, Vitest, Jest</li>
+                            </ul>
+                        </div>
+                        <div class="resume-card" style="margin-top: 2rem;">
+                            <h3>Certifications</h3>
+                            <ul>
+                                <li><strong>Salesforce:</strong> Architect: Data, Development Lifecycle and Deployment, Sharing and Visibility, Application, +8 other certifications</li>
+                                <li style="margin-top: 0.5rem;"><strong>Other:</strong> CompTIA Security+, Scrum Master, ServiceNow Administrator</li>
+                            </ul>
+                        </div>
+                        <div class="resume-card" style="margin-top: 2rem;">
+                            <h3>Education</h3>
+                            <ul>
+                                <li><strong>M.S. Computer Science</strong><br>Georgia Institute of Technology<br><span style="font-size: 0.85em; color: var(--text-muted);">Jan 2023 - Dec 2025</span></li>
+                                <li style="margin-top: 0.75rem;"><strong>B.S. Industrial Engineering</strong><br>Virginia Polytechnic Institute and State University<br><span style="font-size: 0.85em; color: var(--text-muted);">Sep 2014 - May 2019</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="main-content">
+                        <div class="timeline-item">
+                            <span class="year">June 2019 - Present</span>
+                            <h3 class="role">Senior Software Engineer</h3>
+                            <span class="company">KPMG | New York, NY</span>
+                            <ul>
+                                <li>Orchestrated the consolidation of multiple legacy personnel systems into a unified Salesforce platform; led 5 cross-functional teams to deliver 6 applications, scaling capacity to 300,000 total users and 5,000+ DAU</li>
+                                <li>Architected a fleet optimization engine in an IL4 environment using time-series and simulation ML models; reduced planning cycles by 75% and provided stakeholders with predictive insights that replaced reactive legacy workflows</li>
+                                <li>Engineered the infrastructure for a multi-million dollar IoT smart warehouse, implementing hyper-converged virtualization to process 1,000+ RFID scans per second via 100+ physical devices using high-availability networking</li>
+                                <li>Led 3 teams through enterprise ServiceNow implementation, delivering 5 Healthcare HR applications to 1,000 DAU</li>
+                                <li>Developed full-stack MVP accelerator, reducing "Time-to-MVP" time by 50%, contributing to multiple contracts wins</li>
+                                <li>Supported migration of CDKTF in-house IaC library to native HCL, enabling continued operations of infrastructure services</li>
+                            </ul>
+                        </div>
+                        <div class="timeline-item">
+                            <span class="year">June 2018 - August 2018</span>
+                            <h3 class="role">Federal Advisory Intern</h3>
+                            <span class="company">KPMG | McLean, VA</span>
+                            <ul>
+                                <li>Developed framework to facilitate pursuance of software contracts, reducing proposal preparation time by 40%</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <section id="projects" class="reveal">
-            <projects-section></projects-section>
+            <div class="container">
+                <h2>Projects</h2>
+                <p class="desc">A selection of recent work focusing on clean code and sustainable web standards.</p>
+
+                <div class="projects-grid">
+                    <article class="project-card">
+                        <div class="image-container">
+                            <img src="public/hackOMSCS.png" alt="Awakening AI - HackOMSCS Winner">
+                        </div>
+                        <div class="content">
+                            <div class="tags">
+                                <span class="tag">Azure</span>
+                                <span class="tag">Computer Vision</span>
+                                <span class="tag">Full Stack</span>
+                            </div>
+                            <h3>Awakening AI - HackOMSCS Winner</h3>
+                            <p>AI-powered fridge analysis app using Computer Vision to identify ingredients and recommend recipes. Built with Azure Cloud Services.</p>
+                            <a href="#" class="link">View Project &rarr;</a>
+                        </div>
+                    </article>
+
+                    <article class="project-card">
+                        <div class="image-container">
+                            <img src="public/Paxos_Nodes.jpg" alt="Multi-Paxos Implementation">
+                        </div>
+                        <div class="content">
+                            <div class="tags">
+                                <span class="tag">Java</span>
+                                <span class="tag">Distributed Systems</span>
+                            </div>
+                            <h3>Multi-Paxos Implementation</h3>
+                            <p>Fault-tolerant distributed consensus algorithm implemented from scratch handling leader election, log replication, and garbage collection.</p>
+                            <a href="#" class="link">View Project &rarr;</a>
+                        </div>
+                    </article>
+
+                    <article class="project-card">
+                        <div class="image-container">
+                            <img src="public/MapReduce_Server.jpg" alt="MapReduce Framework">
+                        </div>
+                        <div class="content">
+                            <div class="tags">
+                                <span class="tag">C++</span>
+                                <span class="tag">gRPC</span>
+                                <span class="tag">Distributed Computing</span>
+                            </div>
+                            <h3>MapReduce Framework</h3>
+                            <p>Distributed data processing framework in C++ using gRPC for worker management, fault tolerance, and data sharding.</p>
+                            <a href="#" class="link">View Project &rarr;</a>
+                        </div>
+                    </article>
+                </div>
+            </div>
         </section>
     </main>
 
-    <app-footer></app-footer>
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="copyright">
+                &copy; <span id="footer-year">2026</span> Adam von Kannewurff
+            </div>
+            <div class="social-links">
+                <a href="https://github.com/avonkannewurff" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://www.linkedin.com/in/avonkannewurff/" target="_blank" rel="noopener">LinkedIn</a>
+                <a href="mailto:avonkannewurff@gmail.com">Email</a>
+            </div>
+        </div>
+    </footer>
 </body>
 
 </html>
