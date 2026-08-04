@@ -29,13 +29,16 @@
     --primary-dark: light-dark(#4b6630, #a4be7b);
     /* Deep Warm Green (light) / Brighter Warm Olive (dark) */
 
-    /* Fixed (non-theme-adaptive) shade for white text on a solid fill.
-       Neither theme's --primary-dark value is dark enough for white
-       text in dark mode (the whole point of that value is to be light
-       there), so filled buttons use one dark green in both themes to
-       clear WCAG AA (4.5:1) regardless of color-scheme. */
-    --btn-primary-bg: #4b6630;
-    --btn-primary-bg-hover: #3d5427;
+    /* Filled surfaces (buttons) use --primary-dark as their background too,
+       so they participate in the same theme flip instead of sitting fixed
+       against a page that changes color around them. The text/icon color
+       on top of that fill has to flip with it: white reads on the deep
+       green (light mode), near-black reads on the bright olive (dark
+       mode) — using white in dark mode is what made the button all but
+       disappear against the near-black page (2.7:1 vs. surface). */
+    --on-primary: light-dark(#ffffff, #18181b);
+    --primary-dark-hover: light-dark(#3d5427, #869b64);
+    /* darker, in both directions, for the interactive/hover state */
 
     --accent: light-dark(#d6d3d1, #44403c);
     /* Stone 300 */
@@ -327,12 +330,12 @@ html.js .reveal.fade-in {
 }
 
 .btn-primary {
-    background: var(--btn-primary-bg, #4b6630);
-    color: white;
+    background: var(--primary-dark, #4b6630);
+    color: var(--on-primary, #ffffff);
 }
 
 .btn-primary:hover {
-    background: var(--btn-primary-bg-hover, #3d5427);
+    background: var(--primary-dark-hover, #3d5427);
 }
 
 .btn-outline {
@@ -411,8 +414,8 @@ html.js .reveal.fade-in {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    background: var(--btn-primary-bg, #4b6630);
-    color: white;
+    background: var(--primary-dark, #4b6630);
+    color: var(--on-primary, #ffffff);
     padding: 0.5rem 1rem;
     border-radius: 6px;
     text-decoration: none;
@@ -422,7 +425,7 @@ html.js .reveal.fade-in {
 }
 
 .download-btn:hover {
-    background: var(--btn-primary-bg-hover, #3d5427);
+    background: var(--primary-dark-hover, #3d5427);
 }
 
 .resume-grid {
