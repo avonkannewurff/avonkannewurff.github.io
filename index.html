@@ -21,17 +21,18 @@
     --text-muted: light-dark(#52525b, #a1a1aa);
     /* Zinc 600 */
 
-    /* Warmer & Brighter Green Palette */
-    --primary: light-dark(#739055, #a4be7b);
-    /* Brighter Warm Olive */
-    --primary-light: light-dark(#a4be7b, #c3d8a4);
-    /* Soft light olive */
-    --primary-dark: light-dark(#4b6630, #88a666);
-    /* Deep Warm Green */
+    /* Warmer & Brighter Green Palette.
+       Deliberately flips which shade is "primary" per theme: the deep
+       green reads best on the light surface, the brighter olive reads
+       best on the dark one. Passes WCAG AA (4.5:1) against --bg-surface
+       in both directions (6.15:1 light, 8.63:1 dark). */
+    --primary-dark: light-dark(#4b6630, #a4be7b);
+    /* Deep Warm Green (light) / Brighter Warm Olive (dark) */
 
-    /* Fixed (non-theme-adaptive) shades for white text on a solid fill.
-       --primary-dark's dark-mode value (#88a666) is too light for white
-       text (2.7:1); these stay dark in both themes so filled buttons
+    /* Fixed (non-theme-adaptive) shade for white text on a solid fill.
+       Neither theme's --primary-dark value is dark enough for white
+       text in dark mode (the whole point of that value is to be light
+       there), so filled buttons use one dark green in both themes to
        clear WCAG AA (4.5:1) regardless of color-scheme. */
     --btn-primary-bg: #4b6630;
     --btn-primary-bg-hover: #3d5427;
@@ -475,7 +476,7 @@ html.js .reveal.fade-in {
 .timeline-item {
     margin-bottom: 3rem;
     padding-left: 2rem;
-    border-left: 2px solid var(--primary, #4a5c44);
+    border-left: 2px solid var(--primary-dark, #4b6630);
     position: relative;
 }
 
@@ -486,7 +487,7 @@ html.js .reveal.fade-in {
     top: 0;
     width: 12px;
     height: 12px;
-    background: var(--primary, #4a5c44);
+    background: var(--primary-dark, #4b6630);
     border-radius: 50%;
 }
 
@@ -716,7 +717,7 @@ html.js .reveal.fade-in {
     </header>
 
     <main>
-        <section id="about">
+        <section id="about" class="reveal">
             <div class="container hero">
                 <h1>Systems <span class="highlight">thinking</span>.</h1>
                 <p>
