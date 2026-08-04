@@ -29,6 +29,13 @@
     --primary-dark: light-dark(#4b6630, #88a666);
     /* Deep Warm Green */
 
+    /* Fixed (non-theme-adaptive) shades for white text on a solid fill.
+       --primary-dark's dark-mode value (#88a666) is too light for white
+       text (2.7:1); these stay dark in both themes so filled buttons
+       clear WCAG AA (4.5:1) regardless of color-scheme. */
+    --btn-primary-bg: #4b6630;
+    --btn-primary-bg-hover: #3d5427;
+
     --accent: light-dark(#d6d3d1, #44403c);
     /* Stone 300 */
     --border-color: light-dark(#ddd1c7, #3f3f46);
@@ -139,7 +146,7 @@ html.js .reveal.fade-in {
 .site-nav .logo {
     font-size: 1.25rem;
     font-weight: 700;
-    color: var(--primary, #4a5c44);
+    color: var(--primary-dark, #4b6630);
     text-decoration: none;
     letter-spacing: -0.02em;
 }
@@ -162,7 +169,7 @@ html.js .reveal.fade-in {
 }
 
 .site-nav a:hover {
-    color: var(--primary, #4a5c44);
+    color: var(--primary-dark, #4b6630);
 }
 
 .site-nav .nav-left {
@@ -252,7 +259,7 @@ html.js .reveal.fade-in {
     color: var(--text-muted, #52525b);
 }
 .nav-btn-group .nav-download-link:hover {
-    color: var(--primary, #4a5c44);
+    color: var(--primary-dark, #4b6630);
 }
 
 .theme-toggle {
@@ -267,7 +274,7 @@ html.js .reveal.fade-in {
     transition: color 0.3s ease;
 }
 .theme-toggle:hover {
-    color: var(--primary, #4a5c44);
+    color: var(--primary-dark, #4b6630);
 }
 .theme-toggle-mobile {
     display: none;
@@ -292,7 +299,7 @@ html.js .reveal.fade-in {
 }
 
 #about .highlight {
-    color: var(--primary, #4a5c44);
+    color: var(--primary-dark, #4b6630);
 }
 
 #about p {
@@ -319,12 +326,12 @@ html.js .reveal.fade-in {
 }
 
 .btn-primary {
-    background: var(--primary, #4a5c44);
+    background: var(--btn-primary-bg, #4b6630);
     color: white;
 }
 
 .btn-primary:hover {
-    background: var(--primary-dark, #2d3b2a);
+    background: var(--btn-primary-bg-hover, #3d5427);
 }
 
 .btn-outline {
@@ -403,7 +410,7 @@ html.js .reveal.fade-in {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    background: var(--primary, #4a5c44);
+    background: var(--btn-primary-bg, #4b6630);
     color: white;
     padding: 0.5rem 1rem;
     border-radius: 6px;
@@ -414,7 +421,7 @@ html.js .reveal.fade-in {
 }
 
 .download-btn:hover {
-    background: var(--primary-dark, #364532);
+    background: var(--btn-primary-bg-hover, #3d5427);
 }
 
 .resume-grid {
@@ -485,7 +492,7 @@ html.js .reveal.fade-in {
 
 .year {
     font-weight: 700;
-    color: var(--primary, #4a5c44);
+    color: var(--primary-dark, #4b6630);
     margin-bottom: 0.5rem;
     display: block;
     font-size: 0.9rem;
@@ -593,7 +600,7 @@ html.js .reveal.fade-in {
 }
 
 .project-card .link {
-    color: var(--primary, #4a5c44);
+    color: var(--primary-dark, #4b6630);
     font-weight: 600;
     text-decoration: none;
     font-size: 0.9rem;
@@ -646,7 +653,7 @@ html.js .reveal.fade-in {
 }
 
 .social-links a:hover {
-    color: var(--primary, #4a5c44);
+    color: var(--primary-dark, #4b6630);
 }
 
 .copyright {
@@ -709,7 +716,7 @@ html.js .reveal.fade-in {
     </header>
 
     <main>
-        <section id="about" class="reveal">
+        <section id="about">
             <div class="container hero">
                 <h1>Systems <span class="highlight">thinking</span>.</h1>
                 <p>
