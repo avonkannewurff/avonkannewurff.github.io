@@ -1,0 +1,529 @@
+/* =================================================================
+   Tank easter egg.
+
+   Loaded at runtime by js/tank/boot.js, never from index.html, so it
+   costs nothing on first paint and stays out of the site's critical
+   CSS budget. Everything here is namespaced `tank-`.
+
+   Chrome (nav button, toast) borrows the site's theme variables so it
+   blends in. The tank's own controls use its fixed terracotta, which
+   deliberately does not follow the light/dark theme.
+   ================================================================= */
+
+:root {
+    --tank-accent: #c05621;
+    --tank-accent-lit: #e07a3e;
+    --tank-accent-deep: #a8461a;
+}
+
+/* -----------------------------------------------------------------
+   Canvas overlay
+   Above the fixed header (1000) and footer (900) so the tank can drive
+   over and shell the nav, but pointer-events: none throughout, so every
+   link, button, and scroll gesture on the real site still works.
+   ----------------------------------------------------------------- */
+.tank-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1100;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.tank-canvas.is-live {
+    opacity: 1;
+}
+
+/* -----------------------------------------------------------------
+   Nav summon button — matches .theme-toggle next to it
+   ----------------------------------------------------------------- */
+.tank-nav-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: var(--text-main, #27272a);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.3s ease, transform 0.3s ease;
+    /* .nav-right uses a 2.5rem gap; pull the theme toggle back in. */
+    margin-right: -1.6rem;
+}
+
+.tank-nav-btn:hover,
+.tank-nav-btn.is-active {
+    color: var(--tank-accent);
+}
+
+.tank-nav-btn.is-active {
+    transform: translateX(2px);
+}
+
+.tank-nav-btn[disabled] {
+    opacity: 0.45;
+    cursor: progress;
+}
+
+@media (max-width: 600px) {
+    .tank-nav-btn {
+        margin-right: -0.4rem;
+    }
+}
+
+/* -----------------------------------------------------------------
+   Hint / status toast
+
+   Built from the site's own vocabulary: the 8px card radius, --bg-surface
+   on a --border-color hairline, and key caps that borrow .tag's shape and
+   fill so they read as part of the page rather than as game chrome.
+   ----------------------------------------------------------------- */
+.tank-toast {
+    position: fixed;
+    /* Centred with auto margins rather than left:50% + translateX: with
+       left:50% the containing block is only half the viewport wide, which
+       forced the hint to wrap well before its max-width. */
+    left: 0;
+    right: 0;
+    margin-inline: auto;
+    width: fit-content;
+    bottom: 58px;
+    z-index: 1200;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    max-width: min(94vw, 840px);
+    padding: 0.7rem 0.7rem 0.7rem 0.95rem;
+    border-radius: 10px;
+    background: var(--bg-surface, #faf9f6);
+    color: var(--text-main, #27272a);
+    border: 1px solid var(--border-color, #ddd1c7);
+    box-shadow: 0 12px 34px rgba(0, 0, 0, 0.16);
+    font-family: var(--font-main, system-ui, sans-serif);
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.35;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+/* Beat the UA's [hidden] rule, which loses to the class selector above. */
+.tank-toast[hidden] {
+    display: none;
+}
+
+.tank-toast.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.tank-toast-icon {
+    flex: none;
+    display: flex;
+    align-items: center;
+    color: var(--tank-accent);
+}
+
+.tank-toast-body {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.tank-hint-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 1.1rem;
+}
+
+.tank-hint-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    white-space: nowrap;
+}
+
+.tank-hint-item b {
+    font-weight: 500;
+    color: var(--text-muted, #52525b);
+    font-size: 0.88rem;
+}
+
+.tank-toast kbd {
+    display: inline-block;
+    min-width: 1.55em;
+    padding: 0.15rem 0.42rem;
+    border-radius: 4px;
+    background: var(--bg-body, #f5f4f0);
+    border: 1px solid var(--border-color, #ddd1c7);
+    border-bottom-width: 2px;
+    color: var(--primary-dark, #4b6630);
+    font-family: inherit;
+    font-size: 0.78rem;
+    font-weight: 700;
+    line-height: 1.4;
+    text-align: center;
+}
+
+.tank-toast-close {
+    flex: none;
+    align-self: flex-start;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted, #52525b);
+    font-size: 0.9rem;
+    line-height: 1;
+    padding: 0.35rem 0.5rem;
+    border-radius: 4px;
+    transition: color 0.2s ease, background 0.2s ease;
+}
+
+.tank-toast-close:hover {
+    color: var(--text-main, #27272a);
+    background: var(--bg-body, #f5f4f0);
+}
+
+@media (max-width: 600px) {
+    .tank-toast {
+        font-size: 0.86rem;
+        padding: 0.6rem 0.6rem 0.6rem 0.8rem;
+    }
+}
+
+/* -----------------------------------------------------------------
+   Score + combo badge, trailing the tank around the page
+   ----------------------------------------------------------------- */
+.tank-score {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1180;
+    pointer-events: none;
+    display: none;
+    text-align: center;
+    font-family: var(--font-main, system-ui, sans-serif);
+    /* Fixed width with a matching negative margin means the transform written
+       each frame is the badge's *centre*, so score.js can clamp it into the
+       viewport without measuring layout on every frame. */
+    width: 140px;
+    margin-left: -70px;
+    will-change: transform;
+}
+
+.tank-score.is-visible {
+    display: block;
+}
+
+/* Inner layer: carries the squish animation so it never fights the
+   follow translate written onto .tank-score every frame. */
+.tank-score-card {
+    transform-origin: 50% 100%;
+}
+
+.tank-score-value {
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--tank-accent-lit);
+    /* Hard drop shadow + halo: cartoon lettering that survives any backdrop. */
+    text-shadow:
+        0 2px 0 var(--tank-accent-deep),
+        0 0 3px rgba(0, 0, 0, 0.35),
+        0 0 14px rgba(0, 0, 0, 0.25);
+    transform: rotate(-4deg);
+}
+
+.tank-score-combo,
+.tank-score-best {
+    margin-top: 0.15rem;
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    line-height: 1.2;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+.tank-score-combo {
+    color: var(--tank-accent-lit);
+    text-shadow: 0 1px 0 var(--tank-accent-deep), 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+.tank-score-best {
+    color: var(--text-muted, #52525b);
+    text-shadow: 0 0 6px var(--bg-surface, #faf9f6);
+}
+
+/* A hot streak gets a wobble so it's obvious you're on one. */
+@keyframes tank-combo-throb {
+    0%, 100% { transform: rotate(-4deg) scale(1); }
+    50%      { transform: rotate(-6deg) scale(1.07); }
+}
+
+.tank-score.is-hot .tank-score-value {
+    animation: tank-combo-throb 520ms ease-in-out infinite;
+    color: #ffd34d;
+    text-shadow:
+        0 2px 0 var(--tank-accent-deep),
+        0 0 3px rgba(0, 0, 0, 0.4),
+        0 0 18px rgba(255, 190, 60, 0.7);
+}
+
+/* Floating "+N" labels at each impact. */
+.tank-pop {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1170;
+    display: none;
+    pointer-events: none;
+    font-family: var(--font-main, system-ui, sans-serif);
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--tank-accent-lit);
+    text-shadow: 0 2px 0 var(--tank-accent-deep), 0 0 8px rgba(0, 0, 0, 0.3);
+    will-change: transform, opacity;
+}
+
+.tank-pop.is-big {
+    font-size: 1.4rem;
+    color: #ffd34d;
+    text-shadow: 0 2px 0 var(--tank-accent-deep), 0 0 14px rgba(255, 190, 60, 0.7);
+}
+
+/* The site has no focus-visible styling; these controls bring their own. */
+.tank-nav-btn:focus-visible,
+.tank-toast-close:focus-visible,
+.tank-fire:focus-visible {
+    outline: 2px solid var(--tank-accent);
+    outline-offset: 3px;
+}
+
+/* -----------------------------------------------------------------
+   Touch controls — only rendered on coarse pointers, only while live
+   ----------------------------------------------------------------- */
+.tank-stick,
+.tank-fire,
+.tank-stow {
+    display: none;
+    position: fixed;
+    z-index: 1150;
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+html.tank-live .tank-stick,
+html.tank-live .tank-fire,
+html.tank-live .tank-stow {
+    display: block;
+}
+
+.tank-stick {
+    left: 20px;
+    bottom: 74px;
+    width: 116px;
+    height: 116px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--bg-surface, #faf9f6) 68%, transparent);
+    border: 2px solid var(--border-color, #ddd1c7);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+}
+
+.tank-stick-nub {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 52px;
+    height: 52px;
+    margin: -26px 0 0 -26px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 34% 28%, var(--tank-accent-lit), var(--tank-accent-deep));
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.tank-fire {
+    right: 20px;
+    bottom: 86px;
+    width: 84px;
+    height: 84px;
+    padding: 0;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 3px solid rgba(255, 255, 255, 0.55);
+    background: radial-gradient(circle at 34% 28%, var(--tank-accent-lit), var(--tank-accent-deep));
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+    transition: transform 0.12s ease;
+}
+
+.tank-fire:active {
+    transform: scale(0.93);
+}
+
+/* Touch has no Escape key, so stowing gets its own control. */
+.tank-stow {
+    right: 26px;
+    bottom: 182px;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border-radius: 50%;
+    cursor: pointer;
+    background: var(--bg-surface, #faf9f6);
+    border: 1px solid var(--border-color, #ddd1c7);
+    color: var(--text-muted, #52525b);
+    font-size: 0.9rem;
+    line-height: 1;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+}
+
+@media (pointer: coarse) {
+    /* Keep the toast clear of the joystick and fire button. */
+    .tank-toast {
+        bottom: 240px;
+    }
+}
+
+/* -----------------------------------------------------------------
+   100% cleared: full-screen card + reset countdown.
+   pointer-events stays off so the real site is never blocked.
+   ----------------------------------------------------------------- */
+.tank-complete {
+    position: fixed;
+    inset: 0;
+    z-index: 1220;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    /* Vignette so the card reads against a page that's mostly holes by now.
+       Kept light on purpose: the confetti canvas sits underneath this layer,
+       and a heavier wash greys all of it out. */
+    background: radial-gradient(ellipse at center,
+        color-mix(in srgb, var(--bg-surface, #faf9f6) 18%, transparent) 0%,
+        color-mix(in srgb, var(--bg-surface, #faf9f6) 52%, transparent) 72%);
+}
+
+.tank-complete[hidden] {
+    display: none;
+}
+
+.tank-complete.is-visible {
+    opacity: 1;
+}
+
+.tank-complete-card {
+    text-align: center;
+    padding: 2.2rem 3rem;
+    border-radius: 14px;
+    background: var(--bg-surface, #faf9f6);
+    border: 1px solid var(--border-color, #ddd1c7);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.25);
+    font-family: var(--font-main, system-ui, sans-serif);
+    max-width: min(92vw, 520px);
+}
+
+.tank-complete-pct {
+    font-size: clamp(3.4rem, 12vw, 5.5rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    color: #ffd34d;
+    text-shadow:
+        0 4px 0 var(--tank-accent-deep),
+        0 0 4px rgba(0, 0, 0, 0.3),
+        0 0 26px rgba(255, 190, 60, 0.55);
+    transform: rotate(-3deg);
+}
+
+.tank-complete-title {
+    margin-top: 0.6rem;
+    font-size: clamp(1.2rem, 4vw, 1.7rem);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--tank-accent);
+}
+
+.tank-complete-sub {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-muted, #52525b);
+}
+
+.tank-complete-count {
+    margin-top: 1.4rem;
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--border-color, #ddd1c7);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-main, #27272a);
+    font-variant-numeric: tabular-nums;
+}
+
+/* -----------------------------------------------------------------
+   Damage states applied to real page elements by destruction.js.
+   The craters themselves are inline mask-image styles; these are just
+   the reactions.
+   ----------------------------------------------------------------- */
+@keyframes tank-hit-shake {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    20%      { transform: translate3d(-3px, 2px, 0); }
+    40%      { transform: translate3d(3px, -2px, 0); }
+    60%      { transform: translate3d(-2px, -1px, 0); }
+    80%      { transform: translate3d(2px, 1px, 0); }
+}
+
+.tank-hit {
+    animation: tank-hit-shake 260ms ease-out;
+}
+
+@keyframes tank-collapse {
+    0%   { transform: none; opacity: 1; }
+    16%  { transform: translate3d(0, -7px, 0) rotate(-2deg); opacity: 1; }
+    100% { transform: translate3d(7px, 84px, 0) rotate(11deg); opacity: 0; }
+}
+
+/* `forwards` holds the collapsed state until destruction.js hides it for
+   good. It is never display:none and never removed, so the page's layout
+   is untouched and nothing shifts under the player. */
+.tank-destroyed {
+    animation: tank-collapse 700ms cubic-bezier(0.45, 0, 0.75, 1) forwards;
+    transform-origin: 50% 100%;
+    pointer-events: none;
+}
+
+/* -----------------------------------------------------------------
+   Reduced motion: boot.js already skips auto-deploy (and skips loading
+   Three.js at all). If it's summoned deliberately, take the motion out
+   of everything that isn't the tank itself.
+   ----------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+    .tank-canvas,
+    .tank-toast,
+    .tank-nav-btn,
+    .tank-fire {
+        transition: none;
+    }
+
+    .tank-hit {
+        animation: none;
+    }
+
+    .tank-destroyed {
+        animation: none;
+        opacity: 0;
+    }
+
+    .tank-score.is-hot .tank-score-value {
+        animation: none;
+    }
+}

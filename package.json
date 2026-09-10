@@ -1,0 +1,13 @@
+{
+    "name": "avonkannewurff-site",
+    "version": "1.0.0",
+    "private": true,
+    "description": "Personal site. Static HTML/CSS/JS with no build step — npm is only used to pin and refresh the vendored Three.js build.",
+    "scripts": {
+        "dev": "node serve.mjs",
+        "vendor:three": "npm install && cp node_modules/three/build/three.module.min.js node_modules/three/build/three.core.min.js vendor/ && sed \"s|} from 'three';|} from './three.module.min.js';|\" node_modules/three/examples/jsm/geometries/RoundedBoxGeometry.js > vendor/RoundedBoxGeometry.js"
+    },
+    "devDependencies": {
+        "three": "0.180.0"
+    }
+}
